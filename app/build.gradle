@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'kotlin-parcelize'
 }
 
 android {
@@ -30,6 +31,9 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
+    }
+    buildFeatures {
+        viewBinding true
     }
 }
 
@@ -75,4 +79,10 @@ dependencies {
 
     //Fresco lib for Loading Image
     implementation 'com.facebook.fresco:fresco:2.3.0'
+
+    //ViewPager2 Indicator
+    implementation 'com.tbuonomo.andrui:viewpagerdotsindicator:4.1.2'
+
+    //Animation For ItemRecyclerView
+    implementation 'androidx.dynamicanimation:dynamicanimation:1.0.0'
 }

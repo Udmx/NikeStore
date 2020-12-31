@@ -5,7 +5,7 @@ import io.reactivex.Single
 import ir.udmx.nikestore.data.Product
 
 class ProductLocalDataSource : ProductDataSource {
-    override fun getProducts(): Single<List<Product>> {
+    override fun getProducts(sort: Int): Single<List<Product>> {
         TODO("Not yet implemented")
     }
 

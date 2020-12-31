@@ -5,7 +5,7 @@ import io.reactivex.Single
 import ir.udmx.nikestore.data.Product
 
 interface ProductRepository {
-    fun getProducts(): Single<List<Product>>
+    fun getProducts(sort: Int): Single<List<Product>>
 
     fun getFavoriteProducts(): Single<List<Product>>
 

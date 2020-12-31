@@ -11,6 +11,8 @@ import ir.udmx.nikestore.common.NikeSingleObserver
 import ir.udmx.nikestore.common.NikeViewModel
 import ir.udmx.nikestore.data.Banner
 import ir.udmx.nikestore.data.Product
+import ir.udmx.nikestore.data.SORT_LATEST
+import ir.udmx.nikestore.data.SORT_POPULAR
 import ir.udmx.nikestore.data.repo.BannerRepository
 import ir.udmx.nikestore.data.repo.ProductRepository
 import timber.log.Timber
@@ -22,7 +24,7 @@ class MainViewModel(productRepository: ProductRepository, bannerRepository: Bann
 
     init {
         progressBarLiveData.value = true
-        productRepository.getProducts()
+        productRepository.getProducts(SORT_LATEST)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doFinally { progressBarLiveData.value = false }

@@ -1,6 +1,7 @@
 package ir.udmx.nikestore
 
 import android.app.Application
+import com.facebook.drawee.backends.pipeline.Fresco
 import ir.udmx.nikestore.data.repo.BannerRepository
 import ir.udmx.nikestore.data.repo.BannerRepositoryImpl
 import ir.udmx.nikestore.data.repo.ProductRepository
@@ -9,7 +10,10 @@ import ir.udmx.nikestore.data.repo.source.BannerRemoteDataSource
 import ir.udmx.nikestore.data.repo.source.ProductLocalDataSource
 import ir.udmx.nikestore.data.repo.source.ProductRemoteDataSource
 import ir.udmx.nikestore.feature.main.MainViewModel
+import ir.udmx.nikestore.feature.main.ProductListAdapter
+import ir.udmx.nikestore.services.ImageLoadingService
 import ir.udmx.nikestore.services.http.ApiService
+import ir.udmx.nikestore.services.http.FrescoImageLoadingService
 import ir.udmx.nikestore.services.http.createApiServiceInstance
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.viewmodel.dsl.viewModel
@@ -21,14 +25,17 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
         Timber.plant(Timber.DebugTree())
+        Fresco.initialize(this)
         val myModules = module {
             single<ApiService> { createApiServiceInstance() }
+            single<ImageLoadingService> { FrescoImageLoadingService() }
             factory<ProductRepository> {
                 ProductRepositoryImpl(
                     ProductRemoteDataSource(get()),
                     ProductLocalDataSource()
                 )
             }
+            factory { ProductListAdapter(get()) }
             factory<BannerRepository> { BannerRepositoryImpl(BannerRemoteDataSource(get())) }
             viewModel { MainViewModel(get(), get()) }
         }

@@ -6,7 +6,7 @@ import ir.udmx.nikestore.data.Product
 import ir.udmx.nikestore.services.http.ApiService
 
 class ProductRemoteDataSource(val apiService: ApiService) : ProductDataSource {
-    override fun getProducts(): Single<List<Product>> = apiService.getProduct()
+    override fun getProducts(sort: Int): Single<List<Product>> = apiService.getProduct(sort.toString())
 
     override fun getFavoriteProducts(): Single<List<Product>> {
         TODO("Not yet implemented")
