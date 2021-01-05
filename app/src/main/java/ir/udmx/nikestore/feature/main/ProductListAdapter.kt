@@ -15,6 +15,7 @@ import ir.udmx.nikestore.view.NikeImageView
 
 class ProductListAdapter(val imageLoadingService: ImageLoadingService) :
     RecyclerView.Adapter<ProductListAdapter.ViewHolder>() {
+    var onProductClickListener: OnProductClickListener? = null
     var products: List<Product> = ArrayList<Product>()
         set(value) {
             field = value
@@ -47,7 +48,13 @@ class ProductListAdapter(val imageLoadingService: ImageLoadingService) :
             previousPriceTv.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
 
             itemView.implementSpringAnimationTrait()
-            itemView.setOnClickListener {  }
+            itemView.setOnClickListener {
+                onProductClickListener?.onProductClick(product)
+            }
         }
+    }
+
+    interface OnProductClickListener {
+        fun onProductClick(product: Product)
     }
 }

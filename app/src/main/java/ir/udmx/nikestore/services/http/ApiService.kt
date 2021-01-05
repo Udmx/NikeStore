@@ -2,6 +2,7 @@ package ir.udmx.nikestore.services.http
 
 import io.reactivex.Single
 import ir.udmx.nikestore.data.Banner
+import ir.udmx.nikestore.data.Comment
 import ir.udmx.nikestore.data.Product
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -15,6 +16,9 @@ interface ApiService {
 
     @GET("banner/slider")
     fun getBanners(): Single<List<Banner>>
+
+    @GET("comment/list")
+    fun getComments(@Query("product_id") productId: Int): Single<List<Comment>>
 }
 
 fun createApiServiceInstance(): ApiService {

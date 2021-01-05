@@ -1,21 +1,23 @@
 package ir.udmx.nikestore.feature.main
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import ir.udmx.nikestore.R
+import ir.udmx.nikestore.common.EXTRA_KEY_DATA
 import ir.udmx.nikestore.common.NikeFragment
 import ir.udmx.nikestore.common.convertDpToPixel
 import ir.udmx.nikestore.data.Product
 import ir.udmx.nikestore.databinding.FragmentMainBinding
+import ir.udmx.nikestore.feature.product.ProductDetailActivity
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
-class MainFragment : NikeFragment() {
+class MainFragment : NikeFragment(), ProductListAdapter.OnProductClickListener {
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
     val mainViewModel: MainViewModel by viewModel()
@@ -34,6 +36,7 @@ class MainFragment : NikeFragment() {
         binding.latestProductsRv.layoutManager =
             LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
         binding.latestProductsRv.adapter = productListAdapter
+        productListAdapter.onProductClickListener = this
 
         mainViewModel.productsLiveData.observe(viewLifecycleOwner) {
             Timber.i(it.toString())
@@ -63,5 +66,11 @@ class MainFragment : NikeFragment() {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+    }
+
+    override fun onProductClick(product: Product) {
+        startActivity(Intent(requireContext(), ProductDetailActivity::class.java).apply {
+            putExtra(EXTRA_KEY_DATA, product)
+        })
     }
 }

@@ -3,6 +3,7 @@
     package="ir.udmx.nikestore">
 
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -12,6 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NikeStore"
         android:usesCleartextTraffic="true">
+        <activity android:name=".feature.product.comment.CommentListActivity"></activity>
+        <activity android:name=".feature.product.ProductDetailActivity" />
         <activity android:name=".feature.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

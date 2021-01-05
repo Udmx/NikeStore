@@ -61,6 +61,7 @@
     <style name="TextAppearance.MyTheme.Headline6" parent="TextAppearance.MaterialComponents.Headline6">
         <!--Your custom type style here-->
         <item name="fontFamily">@font/primary_bold</item>
+        <item name="android:fontFamily">@font/primary_bold</item>
         <item name="android:textSize">16sp</item>
         <item name="android:textColor">@color/black</item>
     </style>
