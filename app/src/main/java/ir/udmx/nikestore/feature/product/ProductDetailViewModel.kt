@@ -2,17 +2,21 @@ package ir.udmx.nikestore.feature.product
 
 import android.os.Bundle
 import androidx.lifecycle.MutableLiveData
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.Completable
 import ir.udmx.nikestore.common.EXTRA_KEY_DATA
 import ir.udmx.nikestore.common.NikeSingleObserver
 import ir.udmx.nikestore.common.NikeViewModel
 import ir.udmx.nikestore.common.asyncNetworkRequest
 import ir.udmx.nikestore.data.Comment
 import ir.udmx.nikestore.data.Product
+import ir.udmx.nikestore.data.repo.CartRepository
 import ir.udmx.nikestore.data.repo.CommentRepository
 
-class ProductDetailViewModel(bundle: Bundle, commentRepository: CommentRepository) :
+class ProductDetailViewModel(
+    bundle: Bundle,
+    commentRepository: CommentRepository,
+    val cartRepository: CartRepository
+) :
     NikeViewModel() {
     val productLiveData = MutableLiveData<Product>()
     val commentsLiveData = MutableLiveData<List<Comment>>()
@@ -29,4 +33,7 @@ class ProductDetailViewModel(bundle: Bundle, commentRepository: CommentRepositor
                 }
             })
     }
+
+    fun onAddToCartBtn(): Completable =
+        cartRepository.addToCart(productLiveData.value!!.id).ignoreElement()
 }

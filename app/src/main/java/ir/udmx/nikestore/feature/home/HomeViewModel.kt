@@ -1,4 +1,4 @@
-package ir.udmx.nikestore.feature.main
+package ir.udmx.nikestore.feature.home
 
 
 import androidx.lifecycle.LiveData
@@ -17,7 +17,7 @@ import ir.udmx.nikestore.data.repo.BannerRepository
 import ir.udmx.nikestore.data.repo.ProductRepository
 import timber.log.Timber
 
-class MainViewModel(productRepository: ProductRepository, bannerRepository: BannerRepository) :
+class HomeViewModel(productRepository: ProductRepository, bannerRepository: BannerRepository) :
     NikeViewModel() {
     val productsLiveData = MutableLiveData<List<Product>>()
     val bannersLiveData = MutableLiveData<List<Banner>>()

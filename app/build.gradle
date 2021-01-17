@@ -85,4 +85,7 @@ dependencies {
 
     //Animation For ItemRecyclerView
     implementation 'androidx.dynamicanimation:dynamicanimation:1.0.0'
+
+    //EventBus
+    implementation 'org.greenrobot:eventbus:3.2.0'
 }

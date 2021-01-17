@@ -5,11 +5,18 @@ import android.graphics.Paint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
+import io.reactivex.CompletableObserver
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import ir.udmx.nikestore.R
 import ir.udmx.nikestore.common.EXTRA_KEY_ID
 import ir.udmx.nikestore.common.NikeActivity
+import ir.udmx.nikestore.common.NikeCompletableObserver
 import ir.udmx.nikestore.common.formatPrice
 import ir.udmx.nikestore.data.Comment
 import ir.udmx.nikestore.databinding.ActivityProductDetailBinding
@@ -28,6 +35,7 @@ class ProductDetailActivity : NikeActivity() {
     val productDetailViewModel: ProductDetailViewModel by viewModel { parametersOf(intent.extras) }
     val imageLoadingService: ImageLoadingService by inject()
     val commentAdapter = CommentAdapter() //چون دیپندنسی نداره نیازی به اینجکت نداره
+    val compositeDisposable = CompositeDisposable()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityProductDetailBinding.inflate(layoutInflater)
@@ -40,7 +48,7 @@ class ProductDetailActivity : NikeActivity() {
             binding.titleTv.text = it.title
             binding.currentPriceTv.text = formatPrice(it.price)
             binding.previousPriceTv.text = formatPrice(it.previous_price)
-            binding.previousPriceTv.paintFlags=Paint.STRIKE_THRU_TEXT_FLAG
+            binding.previousPriceTv.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
             binding.toolbarTitleTv.text = it.title
 
         }
@@ -96,5 +104,21 @@ class ProductDetailActivity : NikeActivity() {
                 }
             })
         }
+
+        binding.addToCartBtn.setOnClickListener {
+            productDetailViewModel.onAddToCartBtn()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(object : NikeCompletableObserver(compositeDisposable) {
+                    override fun onComplete() {
+                        showSnackBar(getString(R.string.success_addToCart))
+                    }
+                })
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        compositeDisposable.clear()
     }
 }

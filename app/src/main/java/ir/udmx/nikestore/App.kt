@@ -4,12 +4,10 @@ import android.app.Application
 import android.os.Bundle
 import com.facebook.drawee.backends.pipeline.Fresco
 import ir.udmx.nikestore.data.repo.*
-import ir.udmx.nikestore.data.repo.source.BannerRemoteDataSource
-import ir.udmx.nikestore.data.repo.source.CommentRemoteDataSource
-import ir.udmx.nikestore.data.repo.source.ProductLocalDataSource
-import ir.udmx.nikestore.data.repo.source.ProductRemoteDataSource
-import ir.udmx.nikestore.feature.main.MainViewModel
-import ir.udmx.nikestore.feature.main.ProductListAdapter
+import ir.udmx.nikestore.data.repo.source.*
+import ir.udmx.nikestore.feature.common.ProductListAdapter
+import ir.udmx.nikestore.feature.list.ProductListViewModel
+import ir.udmx.nikestore.feature.home.HomeViewModel
 import ir.udmx.nikestore.feature.product.ProductDetailViewModel
 import ir.udmx.nikestore.feature.product.comment.CommentListViewModel
 import ir.udmx.nikestore.services.ImageLoadingService
@@ -36,12 +34,14 @@ class App : Application() {
                     ProductLocalDataSource()
                 )
             }
-            factory { ProductListAdapter(get()) }
+            factory { (viewType: Int) -> ProductListAdapter(viewType, get()) }
             factory<BannerRepository> { BannerRepositoryImpl(BannerRemoteDataSource(get())) }
             factory<CommentRepository> { CommentRepositoryImpl(CommentRemoteDataSource(get())) }
-            viewModel { MainViewModel(get(), get()) }
-            viewModel { (bundle: Bundle) -> ProductDetailViewModel(bundle, get()) }
+            factory<CartRepository> { CartRepositoryImpl(CartRemoteDataSource(get())) }
+            viewModel { HomeViewModel(get(), get()) }
+            viewModel { (bundle: Bundle) -> ProductDetailViewModel(bundle, get(), get()) }
             viewModel { (productId: Int) -> CommentListViewModel(productId, get()) }
+            viewModel { (sort: Int) -> ProductListViewModel(sort, get()) }
         }
         startKoin {
             androidContext(this@App)

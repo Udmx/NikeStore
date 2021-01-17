@@ -1,4 +1,4 @@
-package ir.udmx.nikestore.feature.main
+package ir.udmx.nikestore.feature.common
 
 import android.graphics.Paint
 import android.view.LayoutInflater
@@ -13,18 +13,35 @@ import ir.udmx.nikestore.data.Product
 import ir.udmx.nikestore.services.ImageLoadingService
 import ir.udmx.nikestore.view.NikeImageView
 
-class ProductListAdapter(val imageLoadingService: ImageLoadingService) :
+const val VIEW_TYPE_ROUND = 0
+const val VIEW_TYPE_SMALL = 1
+const val VIEW_TYPE_LARGE = 2
+
+class ProductListAdapter(
+    var viewType: Int = VIEW_TYPE_ROUND,
+    val imageLoadingService: ImageLoadingService
+) :
     RecyclerView.Adapter<ProductListAdapter.ViewHolder>() {
     var onProductClickListener: OnProductClickListener? = null
-    var products: List<Product> = ArrayList<Product>()
+    var products: ArrayList<Product> = ArrayList<Product>()
         set(value) {
             field = value
             notifyDataSetChanged()
         }
 
+    override fun getItemViewType(position: Int): Int {
+        return viewType
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val layoutResId = when (viewType) {
+            VIEW_TYPE_ROUND -> R.layout.item_product
+            VIEW_TYPE_SMALL -> R.layout.item_product_small
+            VIEW_TYPE_LARGE -> R.layout.item_product_large
+            else -> throw IllegalStateException("viewType is not valid")
+        }
         return ViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.item_product, parent, false)
+            LayoutInflater.from(parent.context).inflate(layoutResId, parent, false)
         )
     }
 

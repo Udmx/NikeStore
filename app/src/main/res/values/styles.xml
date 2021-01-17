@@ -12,4 +12,5 @@
         <item name="fontFamily">@font/primary_bold</item>
         <item name="android:fontFamily">@font/primary_bold</item>
     </style>
+
 </resources>
