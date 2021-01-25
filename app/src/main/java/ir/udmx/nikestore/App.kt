@@ -1,10 +1,12 @@
 package ir.udmx.nikestore
 
 import android.app.Application
+import android.content.SharedPreferences
 import android.os.Bundle
 import com.facebook.drawee.backends.pipeline.Fresco
 import ir.udmx.nikestore.data.repo.*
 import ir.udmx.nikestore.data.repo.source.*
+import ir.udmx.nikestore.feature.auth.AuthViewModel
 import ir.udmx.nikestore.feature.common.ProductListAdapter
 import ir.udmx.nikestore.feature.list.ProductListViewModel
 import ir.udmx.nikestore.feature.home.HomeViewModel
@@ -14,6 +16,7 @@ import ir.udmx.nikestore.services.ImageLoadingService
 import ir.udmx.nikestore.services.http.ApiService
 import ir.udmx.nikestore.services.http.FrescoImageLoadingService
 import ir.udmx.nikestore.services.http.createApiServiceInstance
+import org.koin.android.ext.android.get
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
@@ -34,6 +37,19 @@ class App : Application() {
                     ProductLocalDataSource()
                 )
             }
+            single<SharedPreferences> {
+                this@App.getSharedPreferences(
+                    "app_settings",
+                    MODE_PRIVATE
+                )
+            }
+            single { UserLocalDataSource(get()) }
+            single<UserRepository> {
+                UserRepositoryImpl(
+                    UserLocalDataSource(get()),
+                    UserRemoteDataSource(get())
+                )
+            }
             factory { (viewType: Int) -> ProductListAdapter(viewType, get()) }
             factory<BannerRepository> { BannerRepositoryImpl(BannerRemoteDataSource(get())) }
             factory<CommentRepository> { CommentRepositoryImpl(CommentRemoteDataSource(get())) }
@@ -42,10 +58,14 @@ class App : Application() {
             viewModel { (bundle: Bundle) -> ProductDetailViewModel(bundle, get(), get()) }
             viewModel { (productId: Int) -> CommentListViewModel(productId, get()) }
             viewModel { (sort: Int) -> ProductListViewModel(sort, get()) }
+            viewModel { AuthViewModel(get()) }
         }
         startKoin {
             androidContext(this@App)
             modules(myModules)
         }
+
+        val userRepository: UserRepository = get()
+        userRepository.loadToken()
     }
 }

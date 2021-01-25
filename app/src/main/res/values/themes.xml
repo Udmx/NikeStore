@@ -35,4 +35,13 @@
         <item name="android:includeFontPadding">false</item>
 
     </style>
+
+    <style name="Theme.Nike.AuthTheme" parent="Theme.NikeStore">
+        <item name="android:statusBarColor" tools:targetApi="lollipop">@color/black</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
+        <item name="android:windowBackground">@color/black</item>
+        <item name="colorOnBackground">@color/white</item>
+        <item name="colorOnSurface">@color/white</item>
+        <item name="materialButtonStyle">@style/Theme.Nike.AuthTheme.Button</item>
+    </style>
 </resources>

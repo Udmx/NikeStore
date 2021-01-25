@@ -88,4 +88,7 @@ dependencies {
 
     //EventBus
     implementation 'org.greenrobot:eventbus:3.2.0'
+
+    // For Debugging Request(Logging ,...)
+    implementation("com.squareup.okhttp3:logging-interceptor:4.9.0")
 }
