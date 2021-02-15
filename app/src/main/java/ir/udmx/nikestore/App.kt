@@ -7,6 +7,7 @@ import com.facebook.drawee.backends.pipeline.Fresco
 import ir.udmx.nikestore.data.repo.*
 import ir.udmx.nikestore.data.repo.source.*
 import ir.udmx.nikestore.feature.auth.AuthViewModel
+import ir.udmx.nikestore.feature.cart.CartViewModel
 import ir.udmx.nikestore.feature.common.ProductListAdapter
 import ir.udmx.nikestore.feature.list.ProductListViewModel
 import ir.udmx.nikestore.feature.home.HomeViewModel
@@ -59,6 +60,7 @@ class App : Application() {
             viewModel { (productId: Int) -> CommentListViewModel(productId, get()) }
             viewModel { (sort: Int) -> ProductListViewModel(sort, get()) }
             viewModel { AuthViewModel(get()) }
+            viewModel { CartViewModel(get()) }
         }
         startKoin {
             androidContext(this@App)
